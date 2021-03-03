@@ -23,9 +23,10 @@ public class follow_dirs : Agent
     {
         rBody.velocity = Vector3.zero;
         // Move the target to a new spot
-        Target.localPosition = new Vector3(UnityEngine.Random.value * 8 - 4,
-                                           0.5f,
-                                           UnityEngine.Random.value * 8 - 4);
+        // Target.localPosition = new Vector3(UnityEngine.Random.value * 8 - 4,
+        //                                    0.5f,
+        //                                    UnityEngine.Random.value * 8 - 4);
+        // Debug.Log(dirs.Count);
     }
     
     public override void CollectObservations(VectorSensor sensor)
@@ -40,9 +41,11 @@ public class follow_dirs : Agent
     {
         timer += Time.deltaTime;
         index = (int)(timer / 0.04195);
-        Debug.Log(index);
-        var dist = vectorAction[0];
+        // Debug.Log(index);
+        var dist = vectorAction[0]+ 2;
+        Debug.Log(dist);
         var dir = Quaternion.Euler(0,vectorAction[1], 0);
+        Debug.Log(dir);
         transform.localRotation = dir;
         rBody.velocity = transform.forward * dist;
     }
@@ -51,5 +54,10 @@ public class follow_dirs : Agent
     {
         actionsOut[0] = (float) dirs[index].Item1;
         actionsOut[1] = (int) dirs[index].Item2;
+        
+    }
+
+    void OnCollisionEnter(Collision collision) {
+    	Debug.Log("SUCCESS");
     }
 }

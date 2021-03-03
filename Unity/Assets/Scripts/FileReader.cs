@@ -7,7 +7,8 @@ public class FileReader
 {
     public static List<(double, double)> read()
     {
-        string[] lines = File.ReadAllLines(@"C:\Users\Isbla\dirs\Assets\Scripts\0file_dir_continuous.txt");
+        // string[] lines = File.ReadAllLines(@"C:\Users\Isbla\dirs\Assets\Scripts\0file_dir_continuous.txt");
+        string[] lines = File.ReadAllLines(@"./Assets/Scripts/0file_dir_continuous.txt");
         List<string[]> mod_lines = new List<string[]>();
         List<(double, double)> dirs = new List<(double, double)>();
 

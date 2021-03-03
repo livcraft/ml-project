@@ -1,17 +1,17 @@
 
 """ *** NOTICE: the filepaths will need to be changed since this was for my computer *** """
 
-import numpy as np
+# import numpy as np
 import math
-import pandas as pd
+# import pandas as pd
 import os
-import cv2
-from PIL import Image
+# import cv2
+# from PIL import Image
 
 # instance variables - make sure to change the filepaths!
-filepath = '/Users/kmcpherson/Documents/UROP/' # filepath to the main folder - can be changed depending on the user
+filepath = '/Users/oliviaschirm/UROP/' # filepath to the main folder - can be changed depending on the user
 testfile = filepath + 'testfile.txt' # tester file with more indices than just 0 & 1
-datafile = filepath + 'Videos/Video Text Files/dj01/g01_2.txt'
+datafile = filepath + 'dj01/dj01_1.txt'
 col_coord = ['Visitor Index', 'X coordinate', 'Y coordinate', 'Time'] # names of the columns for the coordinate file
 col_dir = ['Visitor Index', 'Action', 'Distance', 'Timestamp', 'Time Static'] # names of the columns for the directions file
 file_list = []
@@ -175,7 +175,7 @@ def get_directions(filename, numDirections):
         dir_file.write(newLine) # writes the line in the .txt file
 
     old_filename = filename.replace('.txt', '_dir.txt')
-    new_filename = filepath + 'Videos/Video Text Files/Directions/' + os.path.basename(old_filename)
+    new_filename = filepath + 'Trajectory_Data/' + os.path.basename(old_filename)
     os.rename(old_filename, new_filename)
     dir_file.close()
 
@@ -411,29 +411,31 @@ def set_pixel(image, x, y, c):
 
 if __name__ == '__main__':
 
-    # add the free walker files
-    load_fw_videos()
+    # # add the free walker files
+    # load_fw_videos()
 
-    # add the group files
-    load_group_videos()
+    # # add the group files
+    # load_group_videos()
 
-    for file in file_list: # for every file we've looked through
-        get_directions(file, 9) #get the directions of the file (9 directions)
-        # txt_to_csv(file.replace('.txt', '_dir.txt'), 'dir') #put those into csv's
+    get_directions('/Users/oliviaschirm/UROP/dj01/dj01_1.txt', 9)
 
-    # save the heatmap data to see which places are the most popular
-    heatmap_file = open(filepath + 'heatmap_data', 'w')
-    make_places_data(heatmap_file)
+    # for file in file_list: # for every file we've looked through
+    #     get_directions(file, 9) #get the directions of the file (9 directions)
+    #     # txt_to_csv(file.replace('.txt', '_dir.txt'), 'dir') #put those into csv's
 
-    # optional - include the full data under the info on the places
-    make_full_data(heatmap_file)
+    # # save the heatmap data to see which places are the most popular
+    # heatmap_file = open(filepath + 'heatmap_data', 'w')
+    # make_places_data(heatmap_file)
 
-    # close the file, either after make_places_data (if you just ran that) or after both
-    heatmap_file.close()
+    # # optional - include the full data under the info on the places
+    # make_full_data(heatmap_file)
 
-    # draw the heatmap and save the file
-    create_heatmap('total_heatmap.png') # ! has to be done after get_directions !
+    # # close the file, either after make_places_data (if you just ran that) or after both
+    # heatmap_file.close()
 
-    # a ton of files are made in the process - delete them at the end
-    for file in file_list:
-        os.remove(file)
+    # # draw the heatmap and save the file
+    # create_heatmap('total_heatmap.png') # ! has to be done after get_directions !
+
+    # # a ton of files are made in the process - delete them at the end
+    # for file in file_list:
+    #     os.remove(file)

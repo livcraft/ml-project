@@ -1,16 +1,18 @@
+import os
 
-filepath = '/Users/kmcpherson/Documents/UROP/'
-datafile = filepath + 'Videos/Video Text Files/dj08/g08_2.txt'
-copyfile1 = datafile.replace('ad', 'add1')
-copyfile2 = datafile.replace('ad', 'add2')
-copyfile3 = datafile.replace('ad', 'add3')
+filepath = '/Users/oliviaschirm/UROP/'
+datafile = filepath + 'dj08/g08_2.txt'
+new_file = datafile.replace('.txt', '_shft.txt')
+# copyfile1 = datafile.replace('ad', 'add1')
+# copyfile2 = datafile.replace('ad', 'add2')
+# copyfile3 = datafile.replace('ad', 'add3')
 
 def shiftcoords(xshift, yshift):
     """
     Shifts the coordinate by the specified x and y amounts.
     """
     file = open(datafile, 'r')
-    newfile = open(copyfile1, 'w')
+    newfile = open(new_file, 'w')
     lines = file.readlines()
     for line in lines:
         index = line.split()[0]
@@ -29,6 +31,8 @@ def shiftcoords(xshift, yshift):
         if newy < 0:
             newy = 0
         newfile.write(index +'\t'+ str("{:.{}f}".format(newx, 3)) +'\t'+ str("{:.{}f}".format(newy, 3)) +'\t'+ time +'\n')
+    
+    
 
 def make_diff():
     """
@@ -77,7 +81,9 @@ def combine():
 
 
 if __name__ == '__main__':
+    
 
-    #shiftcoords(4, -8)
-    #make_diff()
-    #combine()
+    shiftcoords(0, 0)
+    # shiftcoords(4, -8)
+    # make_diff()
+    # combine()
