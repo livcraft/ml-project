@@ -21,6 +21,7 @@ public class follow_dirs : Agent
     }
     public override void OnEpisodeBegin()
     {
+        // index = 0;
         rBody.velocity = Vector3.zero;
         // Move the target to a new spot
         // Target.localPosition = new Vector3(UnityEngine.Random.value * 8 - 4,
@@ -42,7 +43,7 @@ public class follow_dirs : Agent
         timer += Time.deltaTime;
         index = (int)(timer / 0.04195);
         // Debug.Log(index);
-        var dist = vectorAction[0]+ 2;
+        var dist = vectorAction[0];
         Debug.Log(dist);
         var dir = Quaternion.Euler(0,vectorAction[1], 0);
         Debug.Log(dir);
@@ -52,12 +53,36 @@ public class follow_dirs : Agent
 
     public override void Heuristic(float[] actionsOut)
     {
+        try {
         actionsOut[0] = (float) dirs[index].Item1;
-        actionsOut[1] = (int) dirs[index].Item2;
-        
+        actionsOut[1] = (float) dirs[index].Item2;
+        } catch (ArgumentOutOfRangeException) {
+            rBody.transform.position = new Vector3(789, 2, -535);
+            AddReward(1f);
+            timer = 0.0f;
+            index = 0;
+            EndEpisode();
+        }  
     }
 
-    void OnCollisionEnter(Collision collision) {
-    	Debug.Log("SUCCESS");
+    private void onTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "End") {
+            AddReward(1f);
+            rBody.transform.position = new Vector3(789, 2, -535);
+            EndEpisode();
+            Debug.Log("SUCCESS");
+
+        }
     }
+
+    // void OnCollisionEnter(Collision collision) 
+    // {
+    //     if (collision.gameObject.tag == "End") {
+    //         SetReward(1);
+    //         rBody.transform.position = new Vector3(789, 2, -535);
+    //         EndEpisode();
+    //         Debug.Log("SUCCESS");
+    //     }
+    // }
 }

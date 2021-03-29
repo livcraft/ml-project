@@ -1,0 +1,24 @@
+{
+    "My Behavior": {
+        "checkpoints": [
+            {
+                "steps": 42628,
+                "file_path": "results/dj01_1_imitation/My Behavior/My Behavior-42628.onnx",
+                "reward": null,
+                "creation_time": 1616628346.4005508
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 42628,
+            "file_path": "results/dj01_1_imitation/My Behavior.onnx",
+            "reward": null,
+            "creation_time": 1616628346.4005508
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1",
+        "tensorflow_version": -1
+    }
+}
