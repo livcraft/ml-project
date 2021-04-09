@@ -3,15 +3,15 @@
 
 # import numpy as np
 import math
-# import pandas as pd
+import pandas as pd
 import os
 # import cv2
-# from PIL import Image
+from PIL import Image
 
 # instance variables - make sure to change the filepaths!
-filepath = '/Users/oliviaschirm/UROP/' # filepath to the main folder - can be changed depending on the user
+filepath = '/Users/oliviaschirm/UROP/shifted_data/dj01_shift' # filepath to the main folder - can be changed depending on the user
 testfile = filepath + 'testfile.txt' # tester file with more indices than just 0 & 1
-datafile = filepath + 'dj01/dj01_1.txt'
+datafile = filepath + '/dj01_1_shft.txt'
 col_coord = ['Visitor Index', 'X coordinate', 'Y coordinate', 'Time'] # names of the columns for the coordinate file
 col_dir = ['Visitor Index', 'Action', 'Distance', 'Timestamp', 'Time Static'] # names of the columns for the directions file
 file_list = []
@@ -174,9 +174,9 @@ def get_directions(filename, numDirections):
 
         dir_file.write(newLine) # writes the line in the .txt file
 
-    old_filename = filename.replace('.txt', '_dir.txt')
-    new_filename = filepath + 'Trajectory_Data/' + os.path.basename(old_filename)
-    os.rename(old_filename, new_filename)
+    # old_filename = filename.replace('.txt', '_dir.txt')
+    # new_filename = filepath + 'Trajectory_Data/' + os.path.basename(old_filename)
+    # os.rename(old_filename, new_filename)
     dir_file.close()
 
 
@@ -212,7 +212,7 @@ def draw_heatmap(image_filename):
     Helper function. Given a dictionary of color values,
     creates an image with the heatmap and returns it.
     """
-    image = load_image('/Users/kmcpherson/Documents/UROP/machu_bw.png') # background image
+    image = load_image('/Users/oliviaschirm/UROP/Trajectories/machu.jpg') # background image
     result = {'height': image['height'],
               'width': image['width'],
               'pixels': image['pixels'].copy()}
@@ -238,7 +238,7 @@ def draw_heatmap(image_filename):
         x, y = coord[0], coord[1]
         draw_circle(result, x, y, 10, RED)
 
-    save_image(result, '/Users/kmcpherson/Documents/UROP/' + image_filename)
+    save_image(result, '/Users/oliviaschirm/UROP/' + image_filename)
 
 def draw_circle(image, x, y, radius, color):
     """
@@ -290,9 +290,12 @@ def make_places_data(heatmap_file):
     left out the rest and assumed any coordinates in those areas are from people
     walking on nearby paths.
     """
+    f = open(heatmap_file, "a")
     places_dict = {'2M Temple': 0.0, 'Paths': 0.0,
                    'UL Terrace': 0.0, 'LR Terrace': 0.0,
-                   'Building 1': 0.0, 'Building 9': 0.0}
+                   'Building 1': 0.0, 'Building 9': 0.0,
+                   'Location 4': 0.0, 'Location 5': 0.0,
+                   'Location 7': 0.0}
 
     for coord in heatmap_dict:
         if heatmap_dict[coord] != -1: # only want to look at points w/ values
@@ -317,6 +320,18 @@ def make_places_data(heatmap_file):
             elif coord[0] in range(300,500) and coord[1] in range(370,600):
                 places_dict['Building 1'] += heatmap_dict[coord]
 
+            # location 4
+            elif coord[0] in range(0,300) and coord[1] in range(250,450):
+                places_dict['Location 4'] += heatmap_dict[coord]
+
+            # location 5
+            elif coord[0] in range(450,600) and coord[1] in range(550,850):
+                places_dict['Location 5'] += heatmap_dict[coord]
+
+            # location 7
+            elif coord[0] in range(550,850) and coord[1] in range(200,700):
+                places_dict['Location 7'] += heatmap_dict[coord]
+
             # all other areas are likely from paths
             else:
                 places_dict['Paths'] += heatmap_dict[coord]
@@ -326,7 +341,7 @@ def make_places_data(heatmap_file):
         if len(place) < 7:
             line += '\t'
         line += str("{:.{}f}".format(places_dict[place], 1)) + ' total seconds\n'
-        heatmap_file.write(line)
+        f.write(line)
 
 
 def make_full_data(heatmap_file):
@@ -417,15 +432,18 @@ if __name__ == '__main__':
     # # add the group files
     # load_group_videos()
 
-    get_directions('/Users/oliviaschirm/UROP/dj01/dj01_1.txt', 9)
+    get_directions('/Users/oliviaschirm/UROP/Trajectory Data/dj08/g08_2__7file.txt', 9)
+    create_heatmap('testing_heatmap.png')
+
+
 
     # for file in file_list: # for every file we've looked through
     #     get_directions(file, 9) #get the directions of the file (9 directions)
     #     # txt_to_csv(file.replace('.txt', '_dir.txt'), 'dir') #put those into csv's
 
     # # save the heatmap data to see which places are the most popular
-    # heatmap_file = open(filepath + 'heatmap_data', 'w')
-    # make_places_data(heatmap_file)
+    # heatmap_file = open(filepath + 'shifted_data/dj01_shift/dj01_1_shft.txt', 'w')
+    make_places_data('/Users/oliviaschirm/UROP/heatmap_file.txt')
 
     # # optional - include the full data under the info on the places
     # make_full_data(heatmap_file)
